@@ -3,7 +3,7 @@ package main
 import (
     "fmt"
     "math"
-    "os"
+    "time"
 )
 
 var plist = make([]int, 0)
@@ -26,7 +26,6 @@ func is_prime(n int) bool {
     }
 
     last_value := upper_middle(n)
-
     for i := 2; i <= last_value; i++ {
         if n % i == 0 {
             return false
@@ -36,18 +35,12 @@ func is_prime(n int) bool {
 }
 
 func prime_factors(n int) {
-    if count > 3 {
-        os.Exit(3)
-    } else {
-        count++
-    }
-    fmt.Println("being ran with ", n)
-    fmt.Println("plist = ", plist)
     //First, test for primeness
     if is_prime(n) {
         plist = append(plist, n)
         return
     }
+
     end := int(math.Ceil(float64(n)/2.0))
     for i := 2; i <= end; i++ {
         if n % i == 0 {
@@ -59,16 +52,38 @@ func prime_factors(n int) {
                 plist = append(plist, int(factor2))
             } else {
                prime_factors(factor2)
-               break
             }
+            //first two divisors are prime, we're done with this iteration
+            return
         }
     }
-    return
+}
+
+func phi(phi float64) float64 {
+    encountered := map[int]bool{}
+    for _, factor := range plist {
+        if encountered[factor] == false {
+            phi *= (1 - 1.0/float64(factor))
+            encountered[factor] = true
+        }
+    }
+    return phi
 }
 
 func main() {
-    //p := prime_factors(17)
-
-    prime_factors(72)
-    fmt.Println(plist)
+    start := time.Now()
+    total := 0.0
+    limit := 1000000
+    for i := 2; i <= limit; i++ {
+        if i % 10000 == 0 {
+            fmt.Println(i)
+        }
+        plist = nil
+        prime_factors(i)
+        total += phi(float64(i))
+    }
+    fmt.Println("total was", total)
+    elapsed := time.Since(start)
+    fmt.Printf("This took %s", elapsed)
+    fmt.Println(" ")
 }
