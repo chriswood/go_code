@@ -7,7 +7,6 @@ import (
     "time"
 )
 
-var val_list = make(map[int]int)
 
 func upper_middle(x int) int {
     // returns the integer ceil of x/2
@@ -34,14 +33,12 @@ func is_prime(n int) bool {
     return true
 }
 
-func build_prime_list(limit int) []int {
+func build_prime_list(limit int, start int) []int {
     plist := make([]int, 0)
     plist = append(plist, 0) //
-    count := 0
-    for i := 3; count < limit; i++ {
+    for i := start; i < limit; i++ {
         if is_prime(i) {
             plist = append(plist, i)
-            count++
         }
     }
     return plist
@@ -85,23 +82,15 @@ func sum_count(whole_arr [][]int, val int) int {
 }
 
 func main() {
-    val_list[10] = 5
-    n := 12
-    prime_sum_count := 0
-    limit := 10
-    for prime_sum_count < limit {
-        start := time.Now()
-        combination_length := n/2
-        plist := build_prime_list(n - 1)
-        all_combos := combrep(combination_length, plist)
-        prime_sum_count = val_list[n - 2] + sum_count(all_combos, n)
-        val_list[n] = prime_sum_count
-        fmt.Printf("finished in %s\n", time.Now().Sub(start))
-        fmt.Printf("n(%v) = %v\n", n, prime_sum_count)
-        n += 2
-    }
-    fmt.Printf("%v\n", val_list)
+    //10 = 5, 12 = 7, 14 = 10, 16 = 14, 18 = 19
+    start := time.Now()
+    n := 18
+    plist := build_prime_list(n - 1, 2)
+    combination_length := n/2
+    fmt.Println(plist)
+    all_combos := combrep(combination_length, plist)
+    fmt.Println(all_combos)
+    prime_sum_count := sum_count(all_combos, n)
+    fmt.Printf("finished in %s\n", time.Now().Sub(start))
+    fmt.Printf("n(%v) = %v\n", n, prime_sum_count)
 }
-
-
-
