@@ -37,11 +37,10 @@ func is_prime(n int) bool {
 func build_prime_list(limit int) []int {
     plist := make([]int, 0)
     plist = append(plist, 0) //
-    count := 0
-    for i := 3; count < limit; i++ {
+    
+    for i := 3; i < limit; i++ {
         if is_prime(i) {
             plist = append(plist, i)
-            count++
         }
     }
     return plist
@@ -84,24 +83,34 @@ func sum_count(whole_arr [][]int, val int) int {
     return total
 }
 
-func main() {
+func main() {//2,2,2,2,3 - 2,2,2,5 - 2,2,7 - 3,3,5 - 3,3,3,2
+    ////9 == 4,10 = 5, 11=5,12 = 7, 13=8, 14 = 10, 15=12, 16 = 14, 17=16, 18 = 19, 19=22,20 = 26
+    val_list[8] = 3
+    val_list[9] = 4
     val_list[10] = 5
+    val_list[11] = 5
     n := 12
     prime_sum_count := 0
-    limit := 10
+    limit := 30
+
     for prime_sum_count < limit {
         start := time.Now()
         combination_length := n/2
         plist := build_prime_list(n - 1)
         all_combos := combrep(combination_length, plist)
         prime_sum_count = val_list[n - 2] + sum_count(all_combos, n)
+        if n % 2 == 1 && is_prime(n - 2) { //handle 2 plus n - 2
+            prime_sum_count++
+        }
         val_list[n] = prime_sum_count
         fmt.Printf("finished in %s\n", time.Now().Sub(start))
         fmt.Printf("n(%v) = %v\n", n, prime_sum_count)
-        n += 2
+        n++
     }
-    fmt.Printf("%v\n", val_list)
+    //fmt.Printf("%v\n", val_list)
 }
+
+//12 all the ways 9 can be summed by 3 plus 1
 
 
 

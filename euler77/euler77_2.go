@@ -74,7 +74,7 @@ func sum_count(whole_arr [][]int, val int) int {
     total := 0
     for _, v := range whole_arr {
         if sum_equals(v, val) {
-            //fmt.Println("found", v)
+            fmt.Println("found", v)
             total++
         }
     }
@@ -82,14 +82,14 @@ func sum_count(whole_arr [][]int, val int) int {
 }
 
 func main() {
-    //10 = 5, 12 = 7, 14 = 10, 16 = 14, 18 = 19
+    //9 == 4,10 = 5, 11=5,12 = 7, 13=8, 14 = 10, 15=12, 16 = 14, 17=16, 18 = 19, 19=22,20 = 26
     start := time.Now()
-    n := 18
+    n := 17
     plist := build_prime_list(n - 1, 2)
     combination_length := n/2
     fmt.Println(plist)
     all_combos := combrep(combination_length, plist)
-    fmt.Println(all_combos)
+    //fmt.Println(all_combos)
     prime_sum_count := sum_count(all_combos, n)
     fmt.Printf("finished in %s\n", time.Now().Sub(start))
     fmt.Printf("n(%v) = %v\n", n, prime_sum_count)
