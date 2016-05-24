@@ -94,3 +94,17 @@ func main() {
     fmt.Printf("finished in %s\n", time.Now().Sub(start))
     fmt.Printf("n(%v) = %v\n", n, prime_sum_count)
 }
+2 - 1(2)
+3 - 1(3)
+4 - 1(2+2)
+5 - 1(2+3)
+6 - 2(2+2+2)(3+3)
+7
+8 - 1(2+2+2+2)
+9 - 1(3+3+3)
+10 - 1(2+2+2+2+2)
+11 - 
+12 - 2(2+2+2+2+2+2) (3+3+3+3)
+
+//write array with all numbers that are divisible by 2 and mark as 1
+//find all ways  3, 3 and 2 can be summed and increment array accodingly
