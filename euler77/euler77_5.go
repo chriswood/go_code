@@ -52,8 +52,8 @@ func combrep(n int, clist []int) [][]int {
 func build_prime_list(limit int) []int {
     plist := make([]int, 0)
     plist = append(plist, 0) //
-    
-    for i := 2; i < limit; i++ {
+    //SKIPPING 2
+    for i := 3; i < limit; i++ {
         if is_prime(i) {
             plist = append(plist, i)
         }
@@ -80,7 +80,7 @@ func get_combies(n int) [][]int {
     found := make([][]int, 0)
     for _, v := range all_combos {
         if sum_equals(v, n) {
-            fmt.Println("found", v)
+            //fmt.Println("found", v)
             found = append(found, v)    
         }
     }
@@ -93,10 +93,27 @@ func main() {
     val_list[2] = nil
     val_list[3] = nil
     val_list[4] = append(val_list[4], []int{2,2})
-    num_limit := 18
-    for i := 5; i <= num_limit; i++ {
-        val_list[i] = get_combies(i)
+    val_list[5] = append(val_list[5], []int{3,2})
+    val_list[6] = append(val_list[6], []int{3,3}, []int{2,2,2})
+    num_limit := 11
+    //handle 2
+    for i := 7; i <= num_limit; i++ {
+        old_vals := val_list[i - 2]
+        //first get previous values
+        for _, v := range old_vals {
+            v = append(v, 2)
+            val_list[i] = append(val_list[i], v)
+        }
+        //then add new one if needed
+        if i % 2 == 1 && is_prime(i - 2) {
+            val_list[i] = append(val_list[i], []int{2, i - 2})
+        }
+        //fmt.Println(val_list[i])
     }
+    // fmt.Println("heeee", val_list)
+    // for i := 5; i <= num_limit; i++ {
+    //     val_list[i] = get_combies(i)
+    // }
 
-    fmt.Println(len(val_list[18]))
+    fmt.Println(val_list)
 }
