@@ -5,9 +5,11 @@ import (
     "fmt"
     "math"
     "time"
+    "sort"
 )
 
 var val_list = make(map[int]int)
+var found = make([][]int)
 
 func upper_middle(x int) int {
     // returns the integer ceil of x/2
@@ -76,6 +78,8 @@ func sum_count(whole_arr [][]int, val int) int {
     total := 0
     for _, v := range whole_arr {
         if sum_equals(v, val) {
+            sort.Ints(v)
+            found = append(found, )
             //fmt.Println("found", v)
             total++
         }

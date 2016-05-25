@@ -4,6 +4,7 @@ import (
     "fmt"
     "math"
     "sort"
+    "time"
 )
 
 var val_list = make(map[int][][]int)
@@ -70,50 +71,78 @@ func sum_equals(arr []int, val int) bool {
     return v == val
 }
 
-func get_combies(n int) [][]int {
-    // return all combinations for one number e.g. 5 = ((2,3))
-    //start with worst case, not using any previous values
-    
-    combination_length := n/2
-    index := sort.Search(len(plist), func(i int) bool { return plist[i] >= n })
-    all_combos := combrep(combination_length, plist[:index - 1]) //TODO start at n
-    found := make([][]int, 0)
-    for _, v := range all_combos {
-        if sum_equals(v, n) {
-            //fmt.Println("found", v)
-            found = append(found, v)    
+func comp_array(a []int, b []int) bool {
+    for i := 0; i < len(a); i++ {
+        if a[i] != b[i] {
+            return false
         }
     }
-    return found
+    return true
+}
+
+func exists(a [][]int, b []int) bool {
+    temp_a, temp_b := []int{}, []int{}
+    for _, element := range a {
+        if len(element) == len(b) {
+            temp_a = element
+            temp_b = b
+            sort.Ints(temp_a)
+            sort.Ints(temp_b)
+            if comp_array(temp_a, temp_b) {
+                return true
+            }
+        }
+    }
+    return false
+}
+
+func get_combies(n int) {
+    // save all combinations for one number e.g. 5 = ((2,3))
+    combination_length := n/3
+    index := sort.Search(len(plist), func(i int) bool {return plist[i] >= n - 1})
+    all_combos := combrep(combination_length, plist[:index])
+    //fmt.Println("all_combos for", n,plist[:index - 1])
+    for _, v := range all_combos {
+        if sum_equals(v, n) {
+            val_list[n] = append(val_list[n], v)
+        }
+    }
     // fmt.Printf("n(%v) = %v\n", n, prime_sum_count)
 }
 
 func main() {
+    start := time.Now()
     val_list[1] = nil
     val_list[2] = nil
     val_list[3] = nil
     val_list[4] = append(val_list[4], []int{2,2})
-    val_list[5] = append(val_list[5], []int{3,2})
+    val_list[5] = append(val_list[5], []int{2,3})
     val_list[6] = append(val_list[6], []int{3,3}, []int{2,2,2})
-    num_limit := 11
+    num_limit := 37
+
+    //first run all larger combinations, no dupes possible
+    for i := 7; i <= num_limit; i++ {
+        fmt.Println(i)
+        get_combies(i)
+    }
+    fmt.Printf("combies took in %s\n", time.Now().Sub(start))
+    start = time.Now()
     //handle 2
     for i := 7; i <= num_limit; i++ {
-        old_vals := val_list[i - 2]
-        //first get previous values
-        for _, v := range old_vals {
-            v = append(v, 2)
-            val_list[i] = append(val_list[i], v)
+        for _, v := range val_list[i - 2] {
+            temp := append(v, 2)
+            val_list[i] = append(val_list[i], temp)
         }
         //then add new one if needed
         if i % 2 == 1 && is_prime(i - 2) {
             val_list[i] = append(val_list[i], []int{2, i - 2})
         }
-        //fmt.Println(val_list[i])
     }
-    // fmt.Println("heeee", val_list)
-    // for i := 5; i <= num_limit; i++ {
-    //     val_list[i] = get_combies(i)
-    // }
 
-    fmt.Println(val_list)
+    fmt.Println(len(val_list[20]))
+    fmt.Printf("2 handling took %s\n", time.Now().Sub(start))
 }
+
+            // if !exists(val_list[n], v) {
+            //     val_list[n] = append(val_list[n], v)    
+            // }
